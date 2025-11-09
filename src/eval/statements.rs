@@ -27,7 +27,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
     } else if let Some(arr) = eval_vec(&expr, lapis) {
         buffer.push_str(&format!("{:?}", arr));
     } else if let Some(mut g) = eval_net_cloned(&expr, lapis) {
-        buffer.push_str(&format!("{}", g.display()));
+        buffer.push_str(&g.display());
         buffer.push_str(&format!("Size           : {}", g.size()));
     } else if let Some(id) = eval_nodeid(&expr, lapis) {
         buffer.push_str(&format!("{:?}", id));
