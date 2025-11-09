@@ -16,6 +16,26 @@ cd lazurite
 cargo run --release
 ```
 
+## use with named pipes
+```bash
+# make a named pipe
+mkfifo p
+# run lazurite and make it read from that pipe
+./target/release/lazurite < p
+```
+from a different terminal
+```bash
+# anything written to that pipe will be evaluated
+echo '2+2' > p
+# write a whole file
+cat file.rs > p
+```
+
+in vim you can make a visual selection and write it to the pipe
+```
+:w >> p
+```
+
 ## thanks
 
 - fundsp https://github.com/SamiPerttu/fundsp
