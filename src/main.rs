@@ -5,6 +5,7 @@ use eval::*;
 
 fn main() {
     println!("// lazurite version {} {}", env!("CARGO_PKG_VERSION"), env!("COMMIT_HASH"));
+    println!("// if reading from stdin, press ctrl+d to evaluate input");
     println!("// https://codeberg.org/tomara-x/lazurite");
     println!("// this machine kills fascists");
     let mut lapis = Lapis::new();
