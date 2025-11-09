@@ -8,11 +8,9 @@ fn main() {
     println!("// https://codeberg.org/tomara-x/lazurite");
     println!("// this machine kills fascists");
     let mut lapis = Lapis::new();
-    let mut input = String::new();
     loop {
-        if io::stdin().read_line(&mut input).is_ok() {
+        if let Ok(input) = io::read_to_string(io::stdin()) {
             lapis.eval(&input);
-            input.clear();
         }
         thread::sleep(Duration::from_nanos(1));
     }
