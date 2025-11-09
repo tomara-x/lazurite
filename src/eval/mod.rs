@@ -74,7 +74,12 @@ impl Lapis {
     pub fn eval(&mut self, input: &str) {
         if !input.is_empty() {
             match parse_str::<Stmt>(&format!("{{{}}}", input)) {
-                Ok(stmt) => println!("{}", eval_stmt(stmt, self)),
+                Ok(stmt) => {
+                    let out = eval_stmt(stmt, self);
+                    if !out.is_empty() {
+                        println!("{}", out);
+                    }
+                }
                 Err(err) => println!("error: {}", err),
             }
         }

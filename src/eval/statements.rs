@@ -87,7 +87,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
                     {
                         g.allocate();
                         g.set_sample_rate(config.sample_rate.0 as f64);
-                        lapis.slot.set(Fade::Smooth, 0.01, Box::new(g));
+                        lapis.slot.set(Fade::Smooth, 0., Box::new(g));
                     }
                 }
             }
@@ -100,7 +100,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
                 if let Some(k) = nth_path_ident(&expr.receiver, 0)
                     && let Some(g) = lapis.gmap.get_mut(&k)
                 {
-                    buffer.push_str(&format!("\n// {:?}", g.error()));
+                    buffer.push_str(&format!("{:?}", g.error()));
                 }
             }
             _ => {
@@ -331,24 +331,24 @@ fn function_calls(expr: ExprCall, lapis: &mut Lapis, buffer: &mut String) -> Opt
     match func.as_str() {
         "list_in_devices" => {
             let hosts = cpal::platform::ALL_HOSTS;
-            buffer.push_str("\n// input devices:\n");
+            buffer.push_str("input devices:\n");
             for (i, host) in hosts.iter().enumerate() {
-                buffer.push_str(&format!("// {}: {:?}:\n", i, host));
+                buffer.push_str(&format!("{}: {:?}:\n", i, host));
                 if let Ok(devices) = cpal::platform::host_from_id(*host).unwrap().input_devices() {
                     for (j, device) in devices.enumerate() {
-                        buffer.push_str(&format!("//     {}: {:?}\n", j, device.name()));
+                        buffer.push_str(&format!("    {}: {:?}\n", j, device.name()));
                     }
                 }
             }
         }
         "list_out_devices" => {
             let hosts = cpal::platform::ALL_HOSTS;
-            buffer.push_str("\n// output devices:\n");
+            buffer.push_str("output devices:\n");
             for (i, host) in hosts.iter().enumerate() {
-                buffer.push_str(&format!("// {}: {:?}:\n", i, host));
+                buffer.push_str(&format!("{}: {:?}:\n", i, host));
                 if let Ok(devices) = cpal::platform::host_from_id(*host).unwrap().output_devices() {
                     for (j, device) in devices.enumerate() {
-                        buffer.push_str(&format!("//     {}: {:?}\n", j, device.name()));
+                        buffer.push_str(&format!("    {}: {:?}\n", j, device.name()));
                     }
                 }
             }
