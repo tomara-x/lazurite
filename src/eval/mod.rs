@@ -78,7 +78,7 @@ impl Lapis {
                 if !out.is_empty() {
                     print!("\n{}", out);
                 } else {
-                    println!("\nevaluated `{}`", input);
+                    println!("\nevaluated `{}`", input.trim());
                 }
             }
             Err(err) => println!("\nerror: {}", err),
