@@ -10,7 +10,10 @@ fn main() {
     println!("// this machine kills fascists");
     let mut lapis = Lapis::new();
     loop {
-        if let Ok(input) = io::read_to_string(io::stdin()) {
+        if let Ok(input) = io::read_to_string(io::stdin())
+            && !input.is_empty()
+        {
+            println!();
             lapis.eval(&input);
         }
         thread::sleep(Duration::from_nanos(1));
