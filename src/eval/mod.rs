@@ -76,7 +76,7 @@ impl Lapis {
             Ok(stmt) => {
                 let out = eval_stmt(stmt, self);
                 if !out.is_empty() {
-                    println!("\n{}", out);
+                    print!("\n{}", out);
                 }
             }
             Err(err) => println!("\nerror: {}", err),
