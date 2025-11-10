@@ -23,21 +23,21 @@ pub fn eval_stmt(s: Stmt, lapis: &mut Lapis) -> String {
 
 fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
     if let Some(n) = eval_float(&expr, lapis) {
-        buffer.push_str(&format!("{}", n));
+        buffer.push_str(&format!("{}\n", n));
     } else if let Some(arr) = eval_vec(&expr, lapis) {
-        buffer.push_str(&format!("{:?}", arr));
+        buffer.push_str(&format!("{:?}\n", arr));
     } else if let Some(mut g) = eval_net_cloned(&expr, lapis) {
         buffer.push_str(&g.display());
-        buffer.push_str(&format!("Size           : {}", g.size()));
+        buffer.push_str(&format!("Size           : {}\n", g.size()));
     } else if let Some(id) = eval_nodeid(&expr, lapis) {
-        buffer.push_str(&format!("{:?}", id));
+        buffer.push_str(&format!("{:?}\n", id));
     } else if let Some(b) = eval_bool(&expr, lapis) {
-        buffer.push_str(&format!("{}", b));
+        buffer.push_str(&format!("{}\n", b));
     } else if let Some(s) = eval_shared(&expr, lapis) {
-        buffer.push_str(&format!("Shared({})", s.value()));
+        buffer.push_str(&format!("Shared({})\n", s.value()));
     } else if let Some(w) = path_wave(&expr, lapis) {
         buffer.push_str(&format!(
-            "Wave(ch:{}, sr:{}, len:{}, dur:{})",
+            "Wave(ch:{}, sr:{}, len:{}, dur:{})\n",
             w.channels(),
             w.sample_rate(),
             w.len(),
@@ -45,7 +45,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
         ));
     } else if let Some(w) = eval_wave(&expr, lapis) {
         buffer.push_str(&format!(
-            "Wave(ch:{}, sr:{}, len:{}, dur:{})",
+            "Wave(ch:{}, sr:{}, len:{}, dur:{})\n",
             w.channels(),
             w.sample_rate(),
             w.len(),
@@ -53,7 +53,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
         ));
     } else if let Some(seq) = path_seq(&expr, lapis).or(call_seq(&expr, lapis).as_ref()) {
         let info = format!(
-            "Sequencer(outs: {}, ins: {}, has_backend: {}, replay: {}, loop: ({}, {}))",
+            "Sequencer(outs: {}, ins: {}, has_backend: {}, replay: {}, loop: ({}, {}))\n",
             seq.outputs(),
             seq.inputs(),
             seq.has_backend(),
@@ -63,11 +63,11 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
         );
         buffer.push_str(&info);
     } else if let Some(source) = eval_source(&expr, lapis) {
-        buffer.push_str(&format!("{:?}", source));
+        buffer.push_str(&format!("{:?}\n", source));
     } else if let Some(event) = eval_eventid(&expr, lapis) {
-        buffer.push_str(&format!("{:?}", event));
+        buffer.push_str(&format!("{:?}\n", event));
     } else if let Some(string) = eval_string(&expr, lapis) {
-        buffer.push_str(&format!("\"{}\"", string));
+        buffer.push_str(&format!("\"{}\"\n", string));
     } else if let Expr::Call(expr) = expr {
         function_calls(expr, lapis, buffer);
     } else if let Expr::Binary(expr) = expr {
@@ -100,7 +100,7 @@ fn eval_expr(expr: Expr, lapis: &mut Lapis, buffer: &mut String) {
                 if let Some(k) = nth_path_ident(&expr.receiver, 0)
                     && let Some(g) = lapis.gmap.get_mut(&k)
                 {
-                    buffer.push_str(&format!("{:?}", g.error()));
+                    buffer.push_str(&format!("{:?}\n", g.error()));
                 }
             }
             _ => {
