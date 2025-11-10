@@ -11,6 +11,7 @@ fn main() {
     let mut lapis = Lapis::new();
     loop {
         if let Ok(input) = io::read_to_string(io::stdin()) {
+            println!();
             lapis.eval(&input);
         }
         thread::sleep(Duration::from_nanos(1));
