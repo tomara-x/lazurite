@@ -76,10 +76,10 @@ impl Lapis {
             Ok(stmt) => {
                 let out = eval_stmt(stmt, self);
                 if !out.is_empty() {
-                    println!("{}", out);
+                    println!("\n{}", out);
                 }
             }
-            Err(err) => println!("error: {}", err),
+            Err(err) => println!("\nerror: {}", err),
         }
     }
     pub fn quiet_eval(&mut self, input: &str) {

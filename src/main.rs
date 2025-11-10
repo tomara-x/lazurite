@@ -13,7 +13,6 @@ fn main() {
         if let Ok(input) = io::read_to_string(io::stdin())
             && !input.is_empty()
         {
-            println!();
             lapis.eval(&input);
         }
         thread::sleep(Duration::from_nanos(1));
