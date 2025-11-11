@@ -274,6 +274,14 @@ fn eval_assign(expr: &ExprAssign, lapis: &mut Lapis) {
                 *v = right;
             }
         }
+        Expr::Lit(left) => {
+            if let Lit::Str(left) = &left.lit
+                && let Some(b) = eval_bool(&expr.right, lapis)
+                && left.value() == "quiet"
+            {
+                lapis.eval_function = if b { Lapis::quiet_eval } else { Lapis::eval };
+            }
+        }
         _ => {}
     }
 }

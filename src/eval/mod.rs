@@ -42,6 +42,7 @@ pub struct Lapis {
     pub out_stream: Option<(StreamConfig, Stream)>,
     pub in_stream: Option<(StreamConfig, Stream)>,
     pub receiver: Receiver<(usize, f32)>,
+    pub eval_function: fn(&mut Lapis, &str),
 }
 
 impl Lapis {
@@ -66,6 +67,7 @@ impl Lapis {
             out_stream: None,
             in_stream: None,
             receiver,
+            eval_function: Lapis::eval,
         };
         lapis.set_out_device(None, None, None, None, None);
         lapis.set_in_device(None, None, None, None, None);
