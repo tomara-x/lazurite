@@ -11,6 +11,10 @@ fundsp = {git = "https://github.com/tomara-x/fundsp", features = ["crossbeam"]}
 cpal = {version = "0.16.0", features = ["jack"]}
 syn = {version = "2.0.109", default-features = false, features = ["parsing", "clone-impls", "full"]}
 crossbeam-channel = "0.5.15"
+plotters = {version = "0.3.7", optional = true}
+
+[features]
+plot = ["dep:plotters"]
 
 [profile.dev]
 opt-level = 1
