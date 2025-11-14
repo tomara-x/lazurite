@@ -36,6 +36,9 @@ in vim you can make a visual selection and write it to the pipe
 :w >> p
 ```
 
+## plotting
+the plot feature is the same as in lapis: [codeberg.org/tomara-x/lapis#plotting](https://codeberg.org/tomara-x/lapis#plotting)
+
 ## thanks
 
 - fundsp https://github.com/SamiPerttu/fundsp
