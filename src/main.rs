@@ -10,12 +10,13 @@ fn main() {
     println!("// https://codeberg.org/tomara-x/lazurite");
     println!("// this machine kills fascists");
     let mut lapis = Lapis::new();
+    let d = Duration::from_millis(1);
     loop {
         if let Ok(input) = io::read_to_string(io::stdin())
             && !input.is_empty()
         {
             (lapis.eval_function)(&mut lapis, &input);
         }
-        thread::sleep(Duration::from_nanos(1));
+        thread::sleep(d);
     }
 }
