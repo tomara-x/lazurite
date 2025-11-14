@@ -1602,7 +1602,9 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let k = nth_path_ident(expr.args.first()?, 0)?;
             let table = lapis.atomic_table_map.get(&k)?;
             let mut interp = Interpolation::Nearest;
-            if let Some(arg1) = expr.args.get(1) && let Some(i) = eval_string(arg1, lapis) {
+            if let Some(arg1) = expr.args.get(1)
+                && let Some(i) = eval_string(arg1, lapis)
+            {
                 if i == "linear" {
                     interp = Interpolation::Linear;
                 } else if i == "cubic" {
