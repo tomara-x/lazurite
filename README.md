@@ -9,10 +9,10 @@ see the lapis readme for more info about it: [codeberg.org/tomara-x/lapis](https
 - clone
 ```
 git clone https://codeberg.org/tomara-x/lazurite.git
+cd lazurite
 ```
 - build and run
 ```
-cd lazurite
 cargo run --release
 ```
 
@@ -50,6 +50,7 @@ in vim you can make a visual selection and write it to the pipe
 - syn https://github.com/dtolnay/syn
 - cpal https://github.com/rustaudio/cpal
 - crossbeam_channel https://github.com/crossbeam-rs/crossbeam
+- plotters https://github.com/plotters-rs/plotters
 
 ---
 
