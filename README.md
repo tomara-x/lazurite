@@ -10,18 +10,26 @@ see the lapis readme for more info about it: [codeberg.org/tomara-x/lapis](https
 ```
 git clone https://codeberg.org/tomara-x/lazurite.git
 ```
-- build
+- build and run
 ```
 cd lazurite
 cargo run --release
 ```
+
+- or build and install
+```
+cargo install --path .
+```
+
+## plotting
+adding `--features plot` to the cargo commands works the same as in lapis: [codeberg.org/tomara-x/lapis#plotting](https://codeberg.org/tomara-x/lapis#plotting)
 
 ## use with named pipes
 ```bash
 # make a named pipe
 mkfifo p
 # run lazurite and make it read from that pipe
-./target/release/lazurite < p
+lazurite < p
 ```
 from a different terminal
 ```bash
@@ -35,9 +43,6 @@ in vim you can make a visual selection and write it to the pipe
 ```
 :w >> p
 ```
-
-## plotting
-the plot feature is the same as in lapis: [codeberg.org/tomara-x/lapis#plotting](https://codeberg.org/tomara-x/lapis#plotting)
 
 ## thanks
 
