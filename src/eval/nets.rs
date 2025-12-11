@@ -781,13 +781,13 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             Some(Net::wrap(Box::new(fir3(*gain))))
         }
         "flanger" => {
-            let feedback_amount = eval_float_f32(expr.args.first()?, lapis)?;
-            let min_delay = eval_float_f32(expr.args.get(1)?, lapis)?;
-            let max_delay = eval_float_f32(expr.args.get(2)?, lapis)?;
+            let feedback_amount = args.first()?;
+            let min = args.get(1)?.max(0.);
+            let max = args.get(2)?.max(0.);
             let node = (pass() | pass())
                 & feedback2(
-                    tap(min_delay, max_delay) | zero(),
-                    shape(Tanh(feedback_amount)) | pass(),
+                    tap(min.min(max), max.max(min)) | zero(),
+                    shape(Tanh(*feedback_amount)) | pass(),
                 );
             let node = node >> (pass() | sink());
             Some(Net::wrap(Box::new(node)))
@@ -1131,7 +1131,44 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let m = nth_path_generic(&expr.func, 1)?.get(1..)?.parse::<usize>().ok()?;
             Some(Net::wrap(Box::new(MultiSplitUnit::new(n, m))))
         }
-        "multitap" | "multitap_linear" => None, //TODO
+        "multitap" => {
+            let a0 = args.first()?.max(0.);
+            let a1 = args.get(1)?.max(0.);
+            let min = a0.min(a1);
+            let max = a0.max(a1);
+            let n = nth_path_generic(&expr.func, 0)?.get(1..)?.parse::<usize>().ok()?;
+            match n {
+                0 => Some(Net::wrap(Box::new(multitap::<U0>(min, max)))),
+                1 => Some(Net::wrap(Box::new(multitap::<U1>(min, max)))),
+                2 => Some(Net::wrap(Box::new(multitap::<U2>(min, max)))),
+                3 => Some(Net::wrap(Box::new(multitap::<U3>(min, max)))),
+                4 => Some(Net::wrap(Box::new(multitap::<U4>(min, max)))),
+                5 => Some(Net::wrap(Box::new(multitap::<U5>(min, max)))),
+                6 => Some(Net::wrap(Box::new(multitap::<U6>(min, max)))),
+                7 => Some(Net::wrap(Box::new(multitap::<U7>(min, max)))),
+                8 => Some(Net::wrap(Box::new(multitap::<U8>(min, max)))),
+                _ => None,
+            }
+        }
+        "multitap_linear" => {
+            let a0 = args.first()?.max(0.);
+            let a1 = args.get(1)?.max(0.);
+            let min = a0.min(a1);
+            let max = a0.max(a1);
+            let n = nth_path_generic(&expr.func, 0)?.get(1..)?.parse::<usize>().ok()?;
+            match n {
+                0 => Some(Net::wrap(Box::new(multitap_linear::<U0>(min, max)))),
+                1 => Some(Net::wrap(Box::new(multitap_linear::<U1>(min, max)))),
+                2 => Some(Net::wrap(Box::new(multitap_linear::<U2>(min, max)))),
+                3 => Some(Net::wrap(Box::new(multitap_linear::<U3>(min, max)))),
+                4 => Some(Net::wrap(Box::new(multitap_linear::<U4>(min, max)))),
+                5 => Some(Net::wrap(Box::new(multitap_linear::<U5>(min, max)))),
+                6 => Some(Net::wrap(Box::new(multitap_linear::<U6>(min, max)))),
+                7 => Some(Net::wrap(Box::new(multitap_linear::<U7>(min, max)))),
+                8 => Some(Net::wrap(Box::new(multitap_linear::<U8>(min, max)))),
+                _ => None,
+            }
+        }
         "multitick" => {
             let n = nth_path_generic(&expr.func, 0)?.get(1..)?.parse::<usize>().ok()?;
             let mut g = Net::new(0, 0);
@@ -1187,11 +1224,11 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             Some(Net::wrap(Box::new(pebbles(speed, seed))))
         }
         "phaser" => {
-            let feedback_amount = eval_float_f32(expr.args.first()?, lapis)?;
+            let feedback_amount = args.first()?;
             let node = (pass() | pass())
                 & feedback(
                     pipei::<U10, _, _>(|_i| add((0.0, 0.1)) >> !allpole())
-                        >> (mul(feedback_amount) | sink() | zero()),
+                        >> (mul(*feedback_amount) | sink() | zero()),
                 );
             let node = (pass() | map(|i: &Frame<f32, U1>| lerp(2.0, 20.0, clamp01(i[0]))))
                 >> node
@@ -1373,14 +1410,14 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
         "sumf" | "sumi" => None, //TODO
         "t" => Some(Net::wrap(Box::new(lfo(|t| t)))),
         "tap" => {
-            let min = args.first()?;
-            let max = args.get(1)?;
-            Some(Net::wrap(Box::new(tap(*min, *max))))
+            let min = args.first()?.max(0.);
+            let max = args.get(1)?.max(0.);
+            Some(Net::wrap(Box::new(tap(min.min(max), max.max(min)))))
         }
         "tap_linear" => {
-            let min = args.first()?;
-            let max = args.get(1)?;
-            Some(Net::wrap(Box::new(tap_linear(*min, *max))))
+            let min = args.first()?.max(0.);
+            let max = args.get(1)?.max(0.);
+            Some(Net::wrap(Box::new(tap_linear(min.min(max), max.max(min)))))
         }
         "thru" => {
             let arg0 = expr.args.first()?;
