@@ -1325,7 +1325,36 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let f = args.first()?;
             Some(Net::wrap(Box::new(organ_hz(*f))))
         }
-        "oversample" => None, //TODO
+        "oversample" => {
+            let x = eval_net(expr.args.first()?, lapis)?;
+            match (x.inputs(), x.outputs()) {
+                (0, 1) => {
+                    let x = An(Unit::<U0, U1>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                (0, 2) => {
+                    let x = An(Unit::<U0, U2>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                (1, 1) => {
+                    let x = An(Unit::<U1, U1>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                (1, 2) => {
+                    let x = An(Unit::<U1, U2>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                (2, 1) => {
+                    let x = An(Unit::<U2, U1>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                (2, 2) => {
+                    let x = An(Unit::<U2, U2>::new(Box::new(x)));
+                    Some(Net::wrap(Box::new(oversample(x))))
+                }
+                _ => None,
+            }
+        }
         "pan" => {
             let p = args.first()?;
             Some(Net::wrap(Box::new(pan(*p))))
@@ -1398,7 +1427,23 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let f = args.first()?;
             Some(Net::wrap(Box::new(ramp_hz(*f))))
         }
-        "resample" => None, //TODO
+        "resample" => {
+            let unit = Box::new(eval_net(expr.args.first()?, lapis)?);
+            if unit.inputs() == 0 {
+                return match unit.outputs() {
+                    1 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U1>::new(unit)))))),
+                    2 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U2>::new(unit)))))),
+                    3 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U3>::new(unit)))))),
+                    4 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U4>::new(unit)))))),
+                    5 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U5>::new(unit)))))),
+                    6 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U6>::new(unit)))))),
+                    7 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U7>::new(unit)))))),
+                    8 => Some(Net::wrap(Box::new(resample(An(Unit::<U0, U8>::new(unit)))))),
+                    _ => None,
+                };
+            }
+            None
+        }
         "resonator" => Some(Net::wrap(Box::new(resonator()))),
         "resonator_hz" => {
             let center = args.first()?;
