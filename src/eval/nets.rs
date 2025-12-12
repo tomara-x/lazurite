@@ -732,7 +732,81 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let gain = args.get(2)?;
             Some(Net::wrap(Box::new(fbell_hz(shape, *center, *q, *gain))))
         }
-        "fdn" | "fdn2" => None, //TODO
+        "fdn" => {
+            let x = eval_net(expr.args.first()?, lapis)?;
+            let n = x.inputs();
+            if x.outputs() == n {
+                return match n {
+                    2 => {
+                        let x = An(Unit::<U2, U2>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    4 => {
+                        let x = An(Unit::<U4, U4>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    8 => {
+                        let x = An(Unit::<U8, U8>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    16 => {
+                        let x = An(Unit::<U16, U16>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    32 => {
+                        let x = An(Unit::<U32, U32>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    64 => {
+                        let x = An(Unit::<U64, U64>::new(Box::new(x)));
+                        Some(Net::wrap(Box::new(fdn(x))))
+                    }
+                    _ => None,
+                };
+            }
+            None
+        }
+        "fdn2" => {
+            let x = eval_net(expr.args.first()?, lapis)?;
+            let y = eval_net(expr.args.get(1)?, lapis)?;
+            let n = x.inputs();
+            if x.outputs() == n && y.inputs() == n && y.outputs() == n {
+                return match n {
+                    2 => {
+                        let x = An(Unit::<U2, U2>::new(Box::new(x)));
+                        let y = An(Unit::<U2, U2>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    4 => {
+                        let x = An(Unit::<U4, U4>::new(Box::new(x)));
+                        let y = An(Unit::<U4, U4>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    8 => {
+                        let x = An(Unit::<U8, U8>::new(Box::new(x)));
+                        let y = An(Unit::<U8, U8>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    16 => {
+                        let x = An(Unit::<U16, U16>::new(Box::new(x)));
+                        let y = An(Unit::<U16, U16>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    32 => {
+                        let x = An(Unit::<U32, U32>::new(Box::new(x)));
+                        let y = An(Unit::<U32, U32>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    64 => {
+                        let x = An(Unit::<U64, U64>::new(Box::new(x)));
+                        let y = An(Unit::<U64, U64>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(fdn2(x, y))))
+                    }
+                    _ => None,
+                };
+            }
+            None
+        }
         "feedback" => {
             let arg = expr.args.get(0)?;
             let net = eval_net(arg, lapis)?;
@@ -741,7 +815,57 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             }
             Some(Net::wrap(Box::new(FeedbackUnit::new(0., Box::new(net)))))
         }
-        "feedback2" => None, //TODO
+        "feedback2" => {
+            let x = eval_net(expr.args.first()?, lapis)?;
+            let y = eval_net(expr.args.get(1)?, lapis)?;
+            let n = x.inputs();
+            if x.outputs() == n && y.inputs() == n && y.outputs() == n {
+                return match n {
+                    1 => {
+                        let x = An(Unit::<U1, U1>::new(Box::new(x)));
+                        let y = An(Unit::<U1, U1>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    2 => {
+                        let x = An(Unit::<U2, U2>::new(Box::new(x)));
+                        let y = An(Unit::<U2, U2>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    3 => {
+                        let x = An(Unit::<U3, U3>::new(Box::new(x)));
+                        let y = An(Unit::<U3, U3>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    4 => {
+                        let x = An(Unit::<U4, U4>::new(Box::new(x)));
+                        let y = An(Unit::<U4, U4>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    5 => {
+                        let x = An(Unit::<U5, U5>::new(Box::new(x)));
+                        let y = An(Unit::<U5, U5>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    6 => {
+                        let x = An(Unit::<U6, U6>::new(Box::new(x)));
+                        let y = An(Unit::<U6, U6>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    7 => {
+                        let x = An(Unit::<U7, U7>::new(Box::new(x)));
+                        let y = An(Unit::<U7, U7>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    8 => {
+                        let x = An(Unit::<U8, U8>::new(Box::new(x)));
+                        let y = An(Unit::<U8, U8>::new(Box::new(y)));
+                        Some(Net::wrap(Box::new(feedback2(x, y))))
+                    }
+                    _ => None,
+                };
+            }
+            None
+        }
         "rfft" => {
             let n = eval_usize(expr.args.first()?, lapis)?;
             let offset = eval_usize(expr.args.get(1)?, lapis)?;
