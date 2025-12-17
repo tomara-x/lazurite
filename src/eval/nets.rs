@@ -1834,6 +1834,14 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let wave = eval_wave(expr.args.first()?, lapis)?;
             Some(Net::wrap(Box::new(maps::wave_mix(wave))))
         }
+        "no_reset" | "nr" => {
+            let unit = Box::new(eval_net(expr.args.first()?, lapis)?);
+            Some(Net::wrap(Box::new(IgnoreReset::new(unit))))
+        }
+        "var_set" => {
+            let shared = eval_shared(expr.args.first()?, lapis)?;
+            Some(Net::wrap(Box::new(maps::var_set(shared))))
+        }
         _ => None,
     }
 }
