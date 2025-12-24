@@ -344,6 +344,8 @@ fn call_float(expr: &ExprCall, lapis: &Lapis) -> Option<f64> {
         "wrap" => Some(wrap(*args.first()?)),
         "mirror" => Some(mirror(*args.first()?)),
         "Some" => Some(*args.first()?),
+        "mirror_to" => Some(mirror_to(*args.first()?, *args.get(1)?, *args.get(2)?)),
+        "wrap_to" => Some(wrap_to(*args.first()?, *args.get(1)?, *args.get(2)?)),
         _ => None,
     }
 }

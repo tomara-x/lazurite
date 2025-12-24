@@ -1842,6 +1842,16 @@ fn call_net(expr: &ExprCall, lapis: &mut Lapis) -> Option<Net> {
             let shared = eval_shared(expr.args.first()?, lapis)?;
             Some(Net::wrap(Box::new(maps::var_set(shared))))
         }
+        "mirror_to" => {
+            let min = args.first()?;
+            let max = args.get(1)?;
+            Some(Net::wrap(Box::new(maps::mirror_to(*min, *max))))
+        }
+        "wrap_to" => {
+            let min = args.first()?;
+            let max = args.get(1)?;
+            Some(Net::wrap(Box::new(maps::wrap_to(*min, *max))))
+        }
         _ => None,
     }
 }
